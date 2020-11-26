@@ -1,23 +1,22 @@
-import pybase64
-import matplotlib
+import numpy as np
+import cv2
 
-f1 = open("flag.png", "rb")
-flag_raw = f1.read()
-flag_encoded = pybase64.b64encode(flag_raw)
-
-f2 = open("universe.png", "rb")
-universe_raw = f2.read()
-universe_encoded = pybase64.b64encode(universe_raw)
-
-#result = flag_encoded ^ universe_encoded
-'''
-for i, j in flag_encoded, universe_encoded:
-    c = i ^ j
-    result = result + c
-'''
+img1 = cv2.imread("flag.png")
+img2 = cv2.imread("universe.png")
 
 
-img = matplotlib.imread("flag.png")
-print(type(img))
+print(img1.shape)
+print(img2.shape)
+new_img = np.zeros((1079, 1920, 3))
 
-print(result)
+
+pixel = 0
+
+for i in range(1079):
+    for j in range(1920):
+        for k in range(3):
+            pixel = img1[i, j, k] ^ img2[i, j, k]
+            new_img[i, j, k] = pixel
+
+cv2.imwrite("xor.png", new_img)
+
